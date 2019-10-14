@@ -1,0 +1,30 @@
+version: "3.6"
+services:
+  postgres:
+    container_name: "postgres"
+    image: "postgres:latest"
+    environment:
+      - POSTGRES_DB=goldbook_db
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_PASSWORD=testing
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+  # expressjs
+  backend:
+    container_name: "backend"
+    build: ./backend
+    working_dir: /home/backend
+    command: nodemon --exec babel-node app.js
+    ports:
+      - "8001:8001"
+  # react
+  frontend:
+    container_name: "frontend"
+    build: ./frontend-react
+    working_dir: /home/frontend-react
+    command: npm start
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_volume:
